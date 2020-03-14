@@ -1,0 +1,55 @@
+Is it a mammal?
+Is it very small?
+Is it a reptile?
+Is it a bird?
+Is it a fish?
+*frog?
+*catfish?
+Does it live near water?
+*crow?
+*flamingo?
+Does it have 4 legs?
+*snake?
+*lizard?
+Is it an insect?
+Is it an arachnid?
+Does it have legs?
+*snail?
+*centipede?
+Is it a spider?
+*scorpion?
+*daddy long legs?
+Does it have wings?
+Does it drink blood?
+*beetle?
+*lice?
+Is it mostly wing?
+*bee?
+*butterfly?
+Is it considered a pet?
+Does it give live birth?
+Does it lay eggs?
+Does it live in the United States?
+*kangaroo?
+*possum?
+Does it have a bill?
+*echidna?
+*platypus?
+Is it a carnivore?
+Is it a herbivore?
+*bear?
+*deer?
+Is it a big cat?
+*wolf?
+*lion?
+Is it a rodent?
+Is it a common pet?
+Is it a primate?
+*pig?
+*monkey?
+Does it bark?
+*cat?
+*dog?
+Is it a household pest?
+*guinea pig?
+*mouse?
