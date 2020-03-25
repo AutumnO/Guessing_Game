@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,38 +7,53 @@ public class BinaryTree : MonoBehaviour
 {
     public TreeNode _root;
 
-    public bool Add(int value)
+    public TreeNode CreateTree(TreeNode root, string line)
     {
-        TreeNode previous = null;
-        TreeNode current = this._root;
-
-        while (current != null)
+        
+        if (root != null)
         {
-            previous = current;
-            if (value < current.value) //Is new node in left tree? 
-                current = current.left;
-            else if (value > current.value) //Is new node in right tree?
-                current = current.right;
-            else
-            {
-                //Exist same value
-                return false;
-            }
+            root = CreateTree(root.left, line);
+            root = CreateTree(root.right, line);
         }
 
-        TreeNode newNode = new TreeNode();
-        newNode.value = value;
+        root.value = line;
+        return root;
+    }
 
-        if (this._root == null)//Tree ise empty
-            this._root = newNode;
+    public bool Add(string value, string child, TreeNode root)
+    {
+        TreeNode parent = root;
+
+        TreeNode new_node = new TreeNode();
+        new_node.value = value;
+        if (child == "left")
+        {
+            parent.left = new_node;
+            return true;
+        }
+        else if (child == "right")
+        {
+            parent.right = new_node;
+            return true;
+        }
+        else if (root == null)
+        {
+            this._root = new_node;
+            return true;
+        }
         else
-        {
-            if (value < previous.value)
-                previous.left = newNode;
-            else
-                previous.right = newNode;
-        }
+            return false;
+    }
 
-        return true;
+    public TreeNode preOrderTraversalMove(TreeNode root)
+    {
+        TreeNode current = root;
+
+        if (current.left != null)
+            return current.left;
+        else if (current.right != null)
+            return current.right;
+
+        return root;
     }
 }
