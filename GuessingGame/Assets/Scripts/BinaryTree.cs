@@ -3,24 +3,78 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BinaryTree : MonoBehaviour
 {
     public TreeNode _root;
     public TreeNode _current;
 
-    public void CreateTree(TreeNode root, StreamReader reader)
+    public void UpdateText(string text)
+    {
+        if (text[0] == '*')
+        {
+            string new_text = text.Substring(1);
+            text = ("Is it a " + new_text);
+        }
+
+        Text question = gameObject.AddComponent<Text>();
+        //q = GameObject.Instantiate<Text>;
+
+        GameObject newText = new GameObject(text.Replace(" ", "-"), typeof(RectTransform));
+        var newTextComp = newText.AddComponent<Text>();
+
+        newTextComp.text = text;
+        newTextComp.alignment = TextAnchor.MiddleCenter;
+        newTextComp.fontSize = 20;
+
+        newText.transform.SetParent(transform);
+    }
+
+    public void Guess(bool answer)
+    {
+        if (!answer)
+        {
+            // CPU LOSE CASE
+            UpdateText("You WON!!! What was your animal?");
+            UpdateText("What is a question that could be used to identify your animal?");
+
+        }
+        else
+        {
+            // CPU WIN CASE
+            UpdateText("You Lost :(");
+        }
+    }
+
+    public void yes()
+    {
+        Debug.Log("Clicked Special Yes");
+        TreeNode b = _current;
+        var c = 0;
+        if (_current.value[0] == '*')    //if leaf node
+        {
+            Guess(true);
+        }
+        TreeNode new_node = TraverseTree(_current, true);
+        UpdateText(new_node.value);
+    }
+
+    public void CreateTree(StreamReader reader)
     {
         /*reader is called every recursion, need to separate them somehow if using recursion?
             can't debug because unity freezes when it runs >:(
     */
         string line;
+        TreeNode root = _root;
         using (reader)
         {   
-            line = reader.ReadLine();
-            while (line != null)
+            
+            while (reader.EndOfStream == false)
             {
-                TreeNode new_node = gameObject.AddComponent <TreeNode>();
+                line = reader.ReadLine();
+                TreeNode new_node = gameObject.AddComponent<TreeNode>();
+                //GameObject.Instantiate <TreeNode>(new_node);
                 new_node.value = line;
                 bool added = false;
 
@@ -28,7 +82,14 @@ public class BinaryTree : MonoBehaviour
                 {
                     if (root == null)
                     {
-                        root = new_node;
+                        if (_root == root)
+                        {
+                            _root = new_node;
+                            root = _root;
+                        }
+                        else
+                            root = new_node;
+
                         added = true;
                     }
                     else if (root.left == null)
@@ -72,6 +133,15 @@ public class BinaryTree : MonoBehaviour
         }
     }
 
+
+    public void Go()
+    {
+        //BinaryTree guessing_tree = gameObject.AddComponent<BinaryTree>();
+        
+        _current = _root;
+        UpdateText(_root.value);
+    }
+
     public bool Add(string value, string child, TreeNode root)
     {
         TreeNode parent = root;
@@ -95,17 +165,5 @@ public class BinaryTree : MonoBehaviour
         }
         else
             return false;
-    }
-
-    public TreeNode preOrderTraversalMove(TreeNode root)
-    {
-        TreeNode current = root;
-
-        if (current.left != null)
-            return current.left;
-        else if (current.right != null)
-            return current.right;
-
-        return root;
     }
 }
