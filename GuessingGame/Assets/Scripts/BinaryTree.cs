@@ -7,6 +7,7 @@ using UnityEngine;
 public class BinaryTree : MonoBehaviour
 {
     public TreeNode _root;
+    public TreeNode _current;
 
     public void CreateTree(TreeNode root, StreamReader reader)
     {
@@ -21,30 +22,54 @@ public class BinaryTree : MonoBehaviour
             {
                 TreeNode new_node = gameObject.AddComponent <TreeNode>();
                 new_node.value = line;
+                bool added = false;
 
-                if (root == null)
+                while (added == false)
                 {
-                    root = new_node;
-                }
-                else if (root.left == null)
-                {
-                    root.left = new_node;
-                    if (line[0] != '*')
-                        root = root.left;
-                }
-                else if (root.right == null)
-                {
-                    root.right = new_node;
-                    if (line[0] != '*')
-                        root = root.right;
-                }
-                else
-                {
-                    //move back up to root's parent
+                    if (root == null)
+                    {
+                        root = new_node;
+                        added = true;
+                    }
+                    else if (root.left == null)
+                    {
+                        root.left = new_node;
+                        root.left.parent = root;
+                        added = true;
+                        if (line[0] != '*')
+                            root = root.left;
+                    }
+                    else if (root.right == null)
+                    {
+                        root.right = new_node;
+                        root.right.parent = root;
+                        added = true;
+                        if (line[0] != '*')
+                            root = root.right;
+                    }
+                    else
+                    {
+                        //move back up to root's parent
+                        root = root.parent;
+                    }
                 }
             }
         }
 
+    }
+
+    public TreeNode TraverseTree(TreeNode prev_q, bool answer)
+    {
+        if (answer)
+        {
+            _current = prev_q.right;
+            return prev_q.right;
+        }
+        else
+        {
+            _current = prev_q.left;
+            return prev_q.left;
+        }
     }
 
     public bool Add(string value, string child, TreeNode root)
