@@ -8,7 +8,11 @@ public class GameManager : MonoBehaviour
     public BinaryTree _guessing_tree;
     public Text _text;
     public char _prev;
+    public string _animal;
+    public string _question;
+    private InputField _input_field;
     public string _file_name = "AnimalTree.txt";
+
     public BinaryTree LoadTree()
     {
         StreamReader reader = new StreamReader(_file_name, Encoding.Default);
@@ -28,15 +32,22 @@ public class GameManager : MonoBehaviour
         _text.text = text;
     }
 
+    public void GetInput(string text)
+    {
+        _input_field.text = "";
+    }
+
     public void Guess(bool answer)  //child is the location the new question should be relative to previous question
     {
         if (!answer)
         {
             // CPU LOSE CASE
+            _input_field.interactable = true;
             UpdateText("You WON!!! What was your animal?");
+            _input_field.onEndEdit.AddListener(GetAnimal);
+
             UpdateText("What is a question that could be used to identify your animal?");
-            string new_question = "/////////////////?";
-            string new_answer = '*' + "//////////////////////" + '?';
+            _input_field.onEndEdit.AddListener(GetQuestion);
 
             TreeNode previous = _guessing_tree._current;
             string line;
@@ -50,9 +61,9 @@ public class GameManager : MonoBehaviour
                     file += "\n";
                 if (line == previous.value)                    //if line is the previous preorder node
                 {
-                    file += new_question;
+                    file += _question;
                     file += "\n" + line;
-                    file += "\n" + new_answer;
+                    file += "\n" + _animal;
                 }
                 else
                     file += line;
@@ -68,6 +79,16 @@ public class GameManager : MonoBehaviour
             // CPU WIN CASE
             UpdateText("I Guessed Correct!! Would you like to try again?");
         }
+    }
+
+    public void GetAnimal(string text)
+    {
+        _animal = text;
+    }
+
+    public void GetQuestion(string text)
+    {
+        _question = text;
     }
 
     public void yes()
@@ -111,6 +132,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _input_field = GameObject.Find("InputElement").GetComponent<InputField>();
+        _input_field.interactable = false;
         _guessing_tree = LoadTree();
         UpdateText(_guessing_tree._root.value);
     }
