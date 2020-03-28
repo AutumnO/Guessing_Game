@@ -400,7 +400,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c39907735fe6541a11e6e8fd8e13a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _guessing_tree: {fileID: 0}
+  _guessing_tree: {fileID: 1852985371}
+  _text: {fileID: 2119312945}
+  _prev: 0
+  _file_name: AnimalTree.txt
 --- !u!4 &951470697
 Transform:
   m_ObjectHideFlags: 0
@@ -499,10 +502,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 951470696}
         m_MethodName: no
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1852985371}
-          m_ObjectArgumentAssemblyTypeName: BinaryTree, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -626,7 +629,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1852985371}
+      - m_Target: {fileID: 951470696}
         m_MethodName: yes
         m_Mode: 1
         m_Arguments:
@@ -907,7 +910,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2119312945
 MonoBehaviour:
@@ -940,7 +943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Holla
+  m_Text: Good Luck :P
 --- !u!222 &2119312946
 CanvasRenderer:
   m_ObjectHideFlags: 0
