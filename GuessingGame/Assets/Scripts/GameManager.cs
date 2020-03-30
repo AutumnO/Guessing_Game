@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
     public string _animal;
     public string _question;
     private InputField _input_field;
+    private Button _restart;
+    private Button _yes;
+    private Button _no;
     public string _file_name = "AnimalTree.txt";
 
     public BinaryTree LoadTree()
@@ -32,22 +36,21 @@ public class GameManager : MonoBehaviour
         _text.text = text;
     }
 
-    public void GetInput(string text)
+    public IEnumerator Guess(bool answer)  //child is the location the new question should be relative to previous question
     {
-        _input_field.text = "";
-    }
+        _yes.interactable = false;
+        _no.interactable = false;
 
-    public void Guess(bool answer)  //child is the location the new question should be relative to previous question
-    {
         if (!answer)
         {
             // CPU LOSE CASE
             _input_field.interactable = true;
+
             UpdateText("You WON!!! What was your animal?");
-            _input_field.onEndEdit.AddListener(GetAnimal);
+            yield return StartCoroutine(GetData("animal"));
 
             UpdateText("What is a question that could be used to identify your animal?");
-            _input_field.onEndEdit.AddListener(GetQuestion);
+            yield return StartCoroutine(GetData("question"));
 
             TreeNode previous = _guessing_tree._current;
             string line;
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
                 line = reader.ReadLine();                   //read line
                 if (file != "")                             //add new lines in between
                     file += "\n";
-                if (line == previous.value)                    //if line is the previous preorder node
+                if (line == previous.value && _question != "" && _animal != "")                    //if line is the previous preorder node
                 {
                     file += _question;
                     file += "\n" + line;
@@ -73,22 +76,31 @@ public class GameManager : MonoBehaviour
             StreamWriter writer = new StreamWriter(_file_name);
             writer.Write(file);
             writer.Close();
+
+            UpdateText("Thanks for improving the guesser! Would you like to try again?");
+            _restart.interactable = true;
         }
         else
         {
             // CPU WIN CASE
             UpdateText("I Guessed Correct!! Would you like to try again?");
+            _restart.interactable = true;
         }
     }
 
-    public void GetAnimal(string text)
+    private IEnumerator WaitForInput(KeyCode key)
     {
-        _animal = text;
+        yield return new WaitUntil(() => Input.GetKeyDown(key));
     }
-
-    public void GetQuestion(string text)
+    
+    private IEnumerator GetData(string type)
     {
-        _question = text;
+        yield return StartCoroutine(WaitForInput(KeyCode.Return));
+        if (type == "animal")
+            _animal = _input_field.text;
+        else if (type == "question")
+            _question = _input_field.text;
+        _input_field.text = "";
     }
 
     public void yes()
@@ -96,9 +108,9 @@ public class GameManager : MonoBehaviour
         if (_guessing_tree._current.value[0] == '*')    //if leaf node
         {
             if (_prev == 'Y')                           //if previous answer was yes, new question is right child
-                Guess(true);
+                StartCoroutine(Guess(true));
             else                                        //if prev answer was no, new question is left child
-                Guess(true);        
+                StartCoroutine(Guess(true));        
         }
         else
         {
@@ -114,9 +126,9 @@ public class GameManager : MonoBehaviour
         if (_guessing_tree._current.value[0] == '*')    //if leaf node
         {
             if (_prev == 'Y')                           //if previous answer was yes, new question is right child
-                Guess(false);
+                StartCoroutine(Guess(false));
             else                                        //if previous answer was no, new question is left child
-                Guess(false);
+                StartCoroutine(Guess(false));
         }
         else
         {
@@ -132,6 +144,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _yes = GameObject.Find("YesButton").GetComponent<Button>();
+        _yes.interactable = true;
+        _no = GameObject.Find("NoButton").GetComponent<Button>();
+        _no.interactable = true;
+        _restart = GameObject.Find("RestartButton").GetComponent<Button>();
+        _restart.interactable = false;
         _input_field = GameObject.Find("InputElement").GetComponent<InputField>();
         _input_field.interactable = false;
         _guessing_tree = LoadTree();
