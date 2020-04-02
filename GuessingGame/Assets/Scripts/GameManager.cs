@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         _text.text = text;
     }
 
-    public IEnumerator Guess(bool answer)  //child is the location the new question should be relative to previous question
+    public IEnumerator Guess(bool answer) 
     {
         _yes.interactable = false;
         _no.interactable = false;
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
                 {
                     file += _question;
                     file += "\n" + line;
-                    file += "\n" + _animal;
+                    file += "\n" + '*' + _animal + '?';
                 }
                 else
                     file += line;
@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
             writer.Close();
 
             UpdateText("Thanks for improving the guesser! Would you like to try again?");
+            _animal = "";
+            _question = "";
             _restart.interactable = true;
         }
         else
@@ -90,11 +92,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitForInput(KeyCode key)
     {
+        yield return 0;
         yield return new WaitUntil(() => Input.GetKeyDown(key));
     }
     
     private IEnumerator GetData(string type)
     {
+        Debug.Log(Input.GetKeyDown(KeyCode.Return));
         yield return StartCoroutine(WaitForInput(KeyCode.Return));
         if (type == "animal")
             _animal = _input_field.text;

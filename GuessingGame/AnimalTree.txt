@@ -40,7 +40,9 @@ Is it a herbivore?
 *bear?
 *deer?
 Is it a big cat?
+Can it adapt to urban life?
 *wolf?
+*coyote?
 *lion?
 Is it a rodent?
 Is it a common pet?
@@ -52,5 +54,7 @@ Does it bark?
 *dog?
 Is it a household pest?
 *guinea pig?
+Is it larger than a mouse?
 *mouse?
+rat
 /end/
