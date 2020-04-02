@@ -54,7 +54,5 @@ Does it bark?
 *dog?
 Is it a household pest?
 *guinea pig?
-Is it larger than a mouse?
 *mouse?
-rat
 /end/
